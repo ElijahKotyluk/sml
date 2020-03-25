@@ -1,0 +1,8 @@
+# Dependencies
+node_modules
+
+# Output files:
+dist
+
+# Test coverage:
+coverage
