@@ -3,3 +3,6 @@
 
 # Output files
 /dist/
+
+# Test Coverage
+/coverage/
