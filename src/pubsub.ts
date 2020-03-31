@@ -20,9 +20,9 @@ export default class PubSub {
             throw new Error(`Subs does not contain key: ${key}`);
         }
 
-        const sub = this.subs[key];
+        const eventKey = this.subs[key];
 
-        for (const fn of sub) {
+        for (const fn of eventKey) {
             fn(payload);
         }
     }
