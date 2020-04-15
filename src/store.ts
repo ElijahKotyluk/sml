@@ -1,18 +1,21 @@
+import PubSub from "./pubsub";
+
 export type StoreOptions<State> = {
     actions?: Actions;
     mutations?: Mutations;
     state?: State;
 }
 
-export type Action = (context: Context, payload?: any) => any;
-export type Mutation = (context: Context, payload?: any) => any;
-
+export type Dispatch = (actionKey: string, payload?: any) => Promise<any>;
+export type Commit = (mutationKey: string, payload?: any) => void;
+export type ActionFn = (...args: any[]) => Promise<any>;
+export type MutationFn = (...args: any[]) => void;
 export type Context = {
     state: State
 };
 
-export type Actions = { [key: string]: Action };
-export type Mutations = { [key: string]: Mutation };
+export type Actions = { [key: string]: ActionFn };
+export type Mutations = { [key: string]: MutationFn };
 export type State = { [key: string]: any };
 
 export default class Store {
@@ -30,11 +33,21 @@ export default class Store {
         const action = this.actions[actionKey];
 
         if (!action) {
-            throw new Error(`Unknown action key: ${actionKey}`);
+            console.error(`Unknown action key: ${actionKey}.`);
+            return;
         }
 
-        action(payload);
+        action.call(this, payload);
     }
 
-    public commit(mutationKey: string, payload?: any) {}
+    public commit(mutationKey: string, payload?: any) {
+        const mutation = this.mutations[mutationKey];
+
+        if (!mutation) {
+            console.error(`Unknown mutation key: ${mutationKey}.`);
+            return;
+        }
+
+        mutation.call(this, payload);
+    }
 }
