@@ -10,6 +10,7 @@ describe('Store', () => {
     });
 
     it('should dispatch an action', () => {
+        const consoleSpy = jest.spyOn(console, 'error');
         const actions = {
             fn: jest.fn()
         }
@@ -24,5 +25,8 @@ describe('Store', () => {
 
         store.dispatch('fn', {});
         expect(store.actions.fn).toHaveBeenCalledWith({})
+
+        store.dispatch('n/a');
+        expect(consoleSpy).toHaveBeenCalledWith('Unknown action key: n/a.');
     })
 });
